@@ -1,0 +1,89 @@
+﻿.team-card {
+	border: 1px solid #e1e8ed;
+	border-radius: 12px;
+	padding: 24px;
+	background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	transition: all 0.3s ease;
+	overflow: hidden;
+	width: stretch;
+}
+
+	.team-card:hover {
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+	}
+
+.card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid #e1e8ed;
+}
+
+.team-name {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #1a202c;
+	color: #667eea;
+}
+
+.points-display {
+	text-align: center;
+	margin: 24px 0;
+	padding: 20px;
+	background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+	border-radius: 12px;
+	border: 1px solid #e1e8ed;
+}
+
+.team-points {
+	font-size: 3rem;
+	font-weight: 800;
+	color: #667eea;
+	margin-bottom: 4px;
+	text-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+}
+
+.points-label {
+	font-size: 0.875rem;
+	color: #6c757d;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	font-weight: 600;
+}
+
+.team-points-section {
+	display: flex;
+	gap: 12px;
+	align-items: stretch;
+}
+
+.image-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.team-image {
+	width: 250px;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.05);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+.points-updated {
+	animation: pulse 0.3s ease-in-out;
+}

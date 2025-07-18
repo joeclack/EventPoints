@@ -6,7 +6,13 @@
 	color: #fff;
 	background-color: #007bff;
 	border: none;
-	border-radius: 0.25rem;
+	border-radius: 8px;
 	cursor: pointer;
 	text-decoration: none;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+  transition: background 0.2s, box-shadow 0.2s;
 }

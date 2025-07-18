@@ -1,0 +1,28 @@
+﻿@page "/edit-event"
+@using EventPoints.Web.Components
+<h3>Edit Event</h3>
+
+@if(SelectedEvent == null)
+{
+	<Spinner />
+} else
+{
+	<div class="form">
+		<TextInput Value="@SelectedEvent.Name" Placeholder="Event name..." ValueChanged="@EventNameChanged"/>
+		<Button Label="Save Changes" OnClick="@(() => SaveEventChanges())" />
+	</div>
+
+	<div class="teams-container">
+		@foreach ( var team in SelectedEvent.Teams )
+		{
+			<div class="team-card">
+				<span class="team-name">@team.Name</span>
+				@* <span class="team-name">@team.Points points</span> *@
+				<div class="team-action-buttons">
+					<Button OnClick="@(() => EditTeam(team))" Label="Edit" />
+					<Button OnClick="@(() => DeleteTeam(team))" Label="Delete" />
+				</div>
+			</div>
+		}
+	</div>
+}

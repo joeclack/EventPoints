@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Components
+
+@typeparam TItem
+@inherits ComponentBase
+	
+<div class="custom-dropdown">
+	<div class="selected @(IsOpen ? "is-expanded" : "")" onclick="@ToggleDropdown">
+		<span>@GetDisplayText(SelectedItem)</span>
+		<span>▾</span>
+	</div>
+	@if ( IsOpen )
+	{
+		<div class="dropdown-list">
+			@{
+				foreach ( var item in Items )
+				{
+					<span onclick="@(() => SelectItem(item))">
+						@DisplaySelector(item)
+					</span>
+				}
+			}
+		</div>
+	}
+</div>

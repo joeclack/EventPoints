@@ -17,17 +17,17 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-	options.AddDefaultPolicy(policy =>
+	options.AddPolicy("AllowAll", policy =>
 	{
 		policy.AllowAnyOrigin()
-			  .AllowAnyHeader()
-			  .AllowAnyMethod();
+			  .AllowAnyMethod()
+			  .AllowAnyHeader();
 	});
 });
 
 var app = builder.Build();
 
-app.UseCors();
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+<div class="upload-container">
+    <label class="upload-label">
+        <span>Select Image</span>
+        <InputFile OnChange="HandleDrop" accept="image/*" class="hidden-input" />
+    </label>
+
+    @if ( !string.IsNullOrEmpty(previewUrl) )
+    {
+        <div class="image-preview">
+            <img src="@previewUrl" alt="Preview" />
+        </div>
+    }
+
+    @if ( !string.IsNullOrEmpty(statusMessage) )
+    {
+        <span class="status-message @(isError ? "error" : "success")">@statusMessage</span>
+    }
+</div>

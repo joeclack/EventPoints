@@ -1,0 +1,20 @@
+﻿<div class="team-card">
+	<div class="card-header">
+		<span class="team-name">@Team.Name</span>
+		<Button onclick="() => ResetPoints()" Label="Reset" />
+	</div>
+	<div class="image-container">
+		@if ( Team.ImageUrl != null )
+		{
+			<img src="@Team.ImageUrl" alt="Team Icon" class="team-image" />
+		}
+	</div>
+    <div class="points-display">
+	    <span class="team-points">@Team.Points</span>
+        <div class="points-label">Points</div>
+    </div>
+	<div class="team-points-section">
+		<NumberInput Value="PointsInput" ValueChanged=PointsChanged Placeholder="Points"/>
+		<Button onclick="() => UpdatePoints()" Label="Update" />
+	</div>
+</div>

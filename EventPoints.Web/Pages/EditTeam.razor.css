@@ -1,0 +1,26 @@
+﻿body {
+}
+
+.edit-team-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.team-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333333;
+  padding: 8px 0;
+}
+
+.team-points {
+  font-size: 1rem;
+  color: #666;
+  margin-left: 8px;
+}
+
+.team-image {
+	width: 200px;
+}

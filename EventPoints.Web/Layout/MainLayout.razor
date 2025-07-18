@@ -1,8 +1,49 @@
-﻿@inherits LayoutComponentBase
+﻿@using EventPoints.Web.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Routing
+@inherits LayoutComponentBase
+
 <div class="page">
+	<div class="mobile-nav">
+		<span class="title">Points</span>
+        <div class="hamburger" @onclick="ToggleMobileNav">
+			<div class="menu-icon">
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+	</div>
+    @if (isMobileNavOpen)
+    {
+        <div class="mobile-drawer-nav">
+            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/events" @onclick="ToggleMobileNav">
+                <span>Events</span>
+            </NavLink>
+            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/admin" @onclick="ToggleMobileNav">
+                <span>Admin</span>
+            </NavLink>
+        </div>
+    }
+    <div class="desktop-nav">
+		<NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/events">
+			<span>Events</span>	
+		</NavLink>
+		<NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/admin">
+			<span>Admin</span>
+		</NavLink>
+	</div>
     <main>
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+
+@code {
+    private bool isMobileNavOpen = false;
+    private void ToggleMobileNav()
+    {
+        isMobileNavOpen = !isMobileNavOpen;
+    }
+}

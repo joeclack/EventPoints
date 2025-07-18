@@ -1,0 +1,41 @@
+﻿@page "/edit-team"
+@using EventPoints.Web.Components
+
+<h3 class="edit-team-title">Edit Team</h3>
+
+@if ( SelectedTeam == null )
+{
+    <Spinner />
+} else
+{
+    <div class="settings-section">
+        <h4 class="settings-section-title">Team Info</h4>
+        <div class="settings-row">
+            <label class="settings-label">Team Name</label>
+            <TextInput Value="@SelectedTeam!.Name" Placeholder="Team name..." ValueChanged="@SelectedTeamNameChanged" />
+        </div>
+    </div>
+    <hr class="settings-divider" />
+    <div class="settings-section">
+        <h4 class="settings-section-title">Team Image</h4>
+        <div class="settings-row image-row">
+            <div class="team-image-container">
+                @if ( !string.IsNullOrEmpty(SelectedTeam!.ImageUrl) )
+                {
+                    <img src="@SelectedTeam!.ImageUrl" alt="Team Icon" class="team-image" />
+                }
+            </div>
+            <ImageUpload TeamId="@SelectedTeam!.Id" OnUploadSuccess="GetTeam" />
+        </div>
+    </div>
+    <hr class="settings-divider" />
+    <div class="settings-section actions-section">
+        @if(IsSaving)
+        {
+            <Spinner/>
+        } else
+        {
+            <Button Label="Save Changes" OnClick="@(() => SaveTeamChanges())" />
+        }
+    </div>
+}

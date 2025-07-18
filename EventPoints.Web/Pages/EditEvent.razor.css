@@ -1,0 +1,39 @@
+﻿.team-card {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+	border: 1px solid #e1e8ed;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+}
+
+	.team-card:hover {
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+		cursor: pointer;
+	}
+
+.team-name {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: #333333;
+	padding: 16px;
+	flex-grow: 1;
+}
+
+.team-action-buttons {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	justify-content: space-between;
+	align-items: center;
+	margin-right: 10px;
+}
+
+.teams-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: 10px;
+}

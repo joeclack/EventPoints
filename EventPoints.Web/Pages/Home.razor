@@ -1,35 +1,10 @@
 ﻿@page "/"
-@using EventPoints.Web.Components
 
-<PageTitle>Home</PageTitle>
+@inject NavigationManager NavigationManager
 
-<h1>Events</h1>
-
-@if(Events == null)
-{
-	<span>Loading...</span>
-} else
-{
-	@foreach(var e in Events)
+@code {
+	protected override void OnInitialized()
 	{
-		<div class="event">
-			<h2>@e.Name</h2>
-			<ul>
-				@foreach(var team in e.Teams)
-				{
-					<li>
-						<div>
-							@team.Name - @team.Points pts
-						</div>
-						<div>
-							<Button onclick="() => UpdatePoints(e.Id, team.Id, -100)" Label="-100" />
-							<Button onclick="() => UpdatePoints(e.Id, team.Id, 100)" Label="100" />
-						</div>
-					</li>
-				}
-			</ul>
-		</div>
+		NavigationManager.NavigateTo("/events");
 	}
 }
-
-

@@ -1,0 +1,25 @@
+﻿@page "/admin"
+@using EventPoints.Web.Components
+
+<h3>Admin</h3>
+
+@if ( EventsList == null )
+{
+	<Spinner />
+} else
+{
+	<div class="events-container">
+		@foreach(var ev in EventsList)
+		{
+			<div class="event-card">
+				<span class="event-name">@ev.Name</span>
+				<div class="event-action-buttons">
+					<Button OnClick="@(() => EditEvent(ev))" Label="Edit"/>
+					<Button OnClick="@(() => DeleteEvent(ev))" Label="Delete"/>
+				</div>
+			</div>
+		}
+	</div>
+}
+
+

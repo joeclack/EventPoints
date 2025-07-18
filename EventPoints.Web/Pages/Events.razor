@@ -1,0 +1,55 @@
+﻿@page "/events"
+@using EventPoints.Domain.Models
+@using EventPoints.Domain.DTOs
+@using EventPoints.Web.Components
+
+<h1>Events</h1>
+
+@if ( EventsList == null )
+{
+	<Spinner />
+} else
+{
+	<div class="filters">
+		<div class="filter-container">
+			<span>Event</span>
+			<DropDown DisplaySelector="e => e.Name"
+					  Items="@EventsList"
+					  SelectedItemChanged="@OnEventChanged"
+					  TItem="EventDto"
+					  SelectedItem="@SelectedEvent" />
+		</div>
+		<div class="mobile-view">
+			<div class="filter-container">
+				<span>Team</span>
+				<DropDown DisplaySelector="e => e.Name"
+						  Items="@SelectedEvent.Teams"
+						  SelectedItemChanged="@OnTeamChanged"
+						  TItem="TeamDto"
+						  SelectedItem="@SelectedTeam" />
+			</div>
+			
+		</div>
+	</div>
+
+	<div class="mobile-view">
+		@if ( SelectedTeam != null )
+		{
+			<div class="team-container">
+				<TeamCard Team="@SelectedTeam" />
+			</div>
+		}
+	</div>
+	@if ( SelectedEvent != null )
+	{
+		<div class="teams-container">
+			@foreach ( var team in SelectedEvent.Teams )
+			{
+				<TeamCard Team="team" />
+			}
+		</div>
+	}
+	
+	
+	
+}
