@@ -54,17 +54,24 @@
 	font-weight: 600;
 }
 
-.team-points-section {
-	display: flex;
-	gap: 12px;
-	align-items: stretch;
-}
-
-.image-container {
+.buttons {
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	gap: 10px;
 }
+.team-points-section {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-bottom: 10px;
+}
+
+	.image-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		height: 300px;
+	}
 
 .team-image {
 	width: 250px;

@@ -1,6 +1,6 @@
 ﻿.input {
 	flex: 1;
-	padding: 7px 16px;
+	padding: 8px 20px;
 	border: 2px solid #e1e8ed;
 	border-radius: 8px;
 	font-size: 1rem;
@@ -9,6 +9,7 @@
 	background: white;
 	transition: all 0.2s ease;
 	outline: none;
+	max-width: 300px;
 }
 .input:focus {
 	border-color: #667eea;
@@ -19,3 +20,15 @@
 	color: #9ca3af;
 	font-weight: 400;
 }
+
+.input-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	margin: 0;
+}
+
+	.input-container span {
+		font-size: 16px;
+		margin-left: 5px;
+	}

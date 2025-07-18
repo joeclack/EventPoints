@@ -1,25 +1,32 @@
 ﻿@page "/admin"
 @using EventPoints.Web.Components
+@using EventPoints.Web.Enums
 
-<h3>Admin</h3>
-
-@if ( EventsList == null )
-{
-	<Spinner />
-} else
-{
-	<div class="events-container">
-		@foreach(var ev in EventsList)
-		{
-			<div class="event-card">
-				<span class="event-name">@ev.Name</span>
-				<div class="event-action-buttons">
-					<Button OnClick="@(() => EditEvent(ev))" Label="Edit"/>
-					<Button OnClick="@(() => DeleteEvent(ev))" Label="Delete"/>
-				</div>
-			</div>
-		}
-	</div>
-}
+<div class="content-container">
+    <h2 class="section-header">Events</h2>
+    @if ( EventsList == null )
+    {
+        <Spinner />
+    } 
+    else
+    {
+        <div class="add-row">
+            <Button Label="New" ButtonType=ButtonType.Primary OnClick="CreateEvent" />
+            <span>@EventsList.Count @(EventsList.Count > 1 ? "events" : "event")</span>
+        </div>
+        <div class="events-container">
+            @foreach(var ev in EventsList)
+            {
+                <div class="row-card">
+                    <span class="name">@ev.Name</span>
+                    <div class="action-buttons">
+                        <Button ButtonType=ButtonType.Secondary OnClick="@(() => EditEvent(ev))" Label="Edit" />
+                        <Button ButtonType=ButtonType.Delete OnClick="@(() => DeleteEvent(ev))" Label="Delete" />
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
 
 

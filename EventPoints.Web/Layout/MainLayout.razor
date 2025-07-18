@@ -6,28 +6,17 @@
 <div class="page">
 	<div class="mobile-nav">
 		<span class="title">Points</span>
-        <div class="hamburger" @onclick="ToggleMobileNav">
+        <button class="hamburger" @onclick="ToggleMobileNav" tabindex="0" aria-label="Open navigation menu" role="button" type="button">
 			<div class="menu-icon">
 				<span></span>
 				<span></span>
 				<span></span>
 			</div>
-		</div>
+		</button>
 	</div>
-    @if (isMobileNavOpen)
-    {
-        <div class="mobile-drawer-nav">
-            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/events" @onclick="ToggleMobileNav">
-                <span>Events</span>
-            </NavLink>
-            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/admin" @onclick="ToggleMobileNav">
-                <span>Admin</span>
-            </NavLink>
-        </div>
-    }
     <div class="desktop-nav">
-		<NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/events">
-			<span>Events</span>	
+		<NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/">
+			<span>Home</span>	
 		</NavLink>
 		<NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/admin">
 			<span>Admin</span>
@@ -38,9 +27,21 @@
             @Body
         </article>
     </main>
+    @if (isMobileNavOpen)
+    {
+        <div class="mobile-drawer-nav">
+            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/" @onclick="ToggleMobileNav">
+                <span>Home</span>
+            </NavLink>
+            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/admin" @onclick="ToggleMobileNav">
+                <span>Admin</span>
+            </NavLink>
+        </div>
+    }
 </div>
 
-@code {
+@code 
+{
     private bool isMobileNavOpen = false;
     private void ToggleMobileNav()
     {

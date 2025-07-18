@@ -38,6 +38,21 @@ namespace EventPoints.Web.Components
 			{
 				await EventsService.SetTeamPoints(Team, 0);
 				Team.Points = 0;
+				PointsInput = 0;
+				StateHasChanged();
+			}
+			catch ( HttpRequestException ex )
+			{
+				Console.Error.WriteLine(ex.Message);
+			}
+		}
+
+		public async Task OverridePoints()
+		{
+			try
+			{
+				await EventsService.SetTeamPoints(Team, PointsInput);
+				Team.Points = PointsInput;
 				StateHasChanged();
 			}
 			catch ( HttpRequestException ex )

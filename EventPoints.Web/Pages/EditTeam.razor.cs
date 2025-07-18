@@ -25,6 +25,11 @@ namespace EventPoints.Web.Pages
 			return await EventsService.GetTeamByIdAsync(TeamId);
 		}
 
+		public void Refresh()
+		{
+			NavigationManager.NavigateTo(NavigationManager.Uri);
+		}
+
 		public async Task SaveTeamChanges()
 		{
 			try

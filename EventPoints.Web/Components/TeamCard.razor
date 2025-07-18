@@ -1,7 +1,8 @@
-﻿<div class="team-card">
+﻿@using EventPoints.Web.Enums
+<div class="team-card">
 	<div class="card-header">
 		<span class="team-name">@Team.Name</span>
-		<Button onclick="() => ResetPoints()" Label="Reset" />
+		<Button onclick="() => ResetPoints()" ButtonType=ButtonType.Secondary Label="Reset" />
 	</div>
 	<div class="image-container">
 		@if ( Team.ImageUrl != null )
@@ -15,6 +16,9 @@
     </div>
 	<div class="team-points-section">
 		<NumberInput Value="PointsInput" ValueChanged=PointsChanged Placeholder="Points"/>
-		<Button onclick="() => UpdatePoints()" Label="Update" />
+		<div class="buttons">
+			<Button ButtonType=ButtonType.Primary onclick="() => UpdatePoints()" Label="Add" />
+			<Button ButtonType=ButtonType.Primary onclick="() => OverridePoints()" Label="Override" />
+		</div>
 	</div>
 </div>

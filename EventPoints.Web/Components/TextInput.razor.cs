@@ -7,6 +7,7 @@ namespace EventPoints.Web.Components
 		[Parameter] public string Value { get; set; }
 		[Parameter] public EventCallback<string> ValueChanged { get; set; }
 		[Parameter] public string? Placeholder { get; set; }
+		[Parameter] public string? Label { get; set; }
 		private async Task OnValueChanged(ChangeEventArgs e)
 		{
 			Value = e.Value?.ToString();

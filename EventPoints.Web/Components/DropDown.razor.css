@@ -1,6 +1,5 @@
 ﻿.custom-dropdown {
 	position: relative;
-	width: auto;
 	cursor: pointer;
 	user-select: none;
 }
@@ -48,3 +47,19 @@
 		.dropdown-list span:hover {
 			background-color: #f0f0f0;
 		}
+
+/*mobile*/
+@media (max-width: 640.98px) {
+	.custom-dropdown {
+		width: auto;
+	}
+
+}
+
+/*desktop*/
+@media (min-width: 641px) {
+	.custom-dropdown {
+		width: 200px;
+	}
+
+}

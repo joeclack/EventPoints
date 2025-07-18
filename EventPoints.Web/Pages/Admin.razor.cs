@@ -27,9 +27,22 @@ namespace EventPoints.Web.Pages
 			}
 		}
 
+		public async Task RefreshEvents()
+		{
+			await EventsService.GetEventsAsync();
+			EventsList = EventsService.Events;
+		}
+
+		public async Task CreateEvent()
+		{
+			string name = "New Event";
+			await EventsService.CreateEvent(name);
+			await RefreshEvents();
+		}
+
 		public void EditEvent(EventDto e)
 		{
-			NavigationManager.NavigateTo($"/edit-event?EventId={e.Id}");
+			NavigationManager.NavigateTo($"/admin/edit-event?EventId={e.Id}");
 		}
 
 		public async Task DeleteEvent(EventDto e)

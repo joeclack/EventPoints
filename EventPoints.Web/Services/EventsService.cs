@@ -131,5 +131,25 @@ namespace EventPoints.Web.Services
 				throw new HttpRequestException($"Error editing event name for event {teamId}: {response.ReasonPhrase}");
 			}
 		}
+
+		internal async Task CreateEvent(string name)
+		{
+			var content = JsonContent.Create(new { Name = name });
+			var response = await Client.PostAsync($"Events", content);
+			if ( !response.IsSuccessStatusCode )
+			{
+				throw new HttpRequestException($"Error creting event: {response.ReasonPhrase}");
+			}
+		}
+
+		internal async Task CreateTeam(string name, Guid eventId)
+		{
+			var content = JsonContent.Create(new { Name = name, EventId = eventId });
+			var response = await Client.PostAsync($"Events/teams", content);
+			if ( !response.IsSuccessStatusCode )
+			{
+				throw new HttpRequestException($"Error creting event: {response.ReasonPhrase}");
+			}
+		}
 	}
 }

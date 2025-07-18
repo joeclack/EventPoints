@@ -1,18 +1,37 @@
-﻿.btn {
+﻿.button {
 	display: inline-block;
-	padding: 0.5rem 1rem;
+	padding: 8px 20px;
 	font-size: 1rem;
 	font-weight: 600;
-	color: #fff;
-	background-color: #007bff;
 	border: none;
 	border-radius: 8px;
 	cursor: pointer;
 	text-decoration: none;
+	transition: all 0.3s ease;
 }
 
-.btn:hover {
-  background-color: #0056b3;
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
-  transition: background 0.2s, box-shadow 0.2s;
-}
+	.button:hover {
+		box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
+	}
+
+	.button.button-primary {
+		background-color: #007bff;
+		color: #fff;
+	}
+
+	.button.button-secondary {
+		color: #484C70;
+		background-color: #fff;
+		border: 1px solid #A6BBC9;
+	}
+
+	.button.button-delete {
+		color: #fff;
+		background-color: #E84855;
+		border: 1px solid #E42535;
+	}
+
+	.button.button-default {
+		background-color: #007bff;
+		color: #fff;
+	}

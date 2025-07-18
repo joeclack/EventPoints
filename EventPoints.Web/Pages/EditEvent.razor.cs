@@ -15,6 +15,7 @@ namespace EventPoints.Web.Pages
 		[Inject] private EventsService EventsService { get; set; } = default!;
 		[Inject] private NavigationManager NavigationManager { get; set; } = default!;
 		public EventDto? SelectedEvent { get; set; } = null;
+		public bool IsSaving { get; set; }
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -26,11 +27,25 @@ namespace EventPoints.Web.Pages
 			return await EventsService.GetEventByIdAsync(EventId);
 		}
 
+		public async Task CreateTeam()
+		{
+			string name = "New Team";
+			await EventsService.CreateTeam(name, SelectedEvent.Id);
+			await RefreshEvent();
+		}
+
+		public async Task RefreshEvent()
+		{
+			SelectedEvent = await EventsService.GetEventByIdAsync(SelectedEvent.Id);
+		}
+
 		public async Task SaveEventChanges()
 		{
 			try
 			{
+				IsSaving = true;
 				await EventsService.EditEventName(EventId, SelectedEvent.Name);
+				IsSaving = false;
 			}
 			catch ( HttpRequestException ex )
 			{
@@ -51,7 +66,7 @@ namespace EventPoints.Web.Pages
 
 		public void EditTeam(TeamDto team)
 		{
-			NavigationManager.NavigateTo($"/edit-team?Teamid={team.Id}");
+			NavigationManager.NavigateTo($"/admin/edit-team?Teamid={team.Id}");
 		}
 	}
 }
