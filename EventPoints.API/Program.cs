@@ -1,6 +1,7 @@
 using EventPoints.API.Database;
-using Microsoft.EntityFrameworkCore;
+using EventPoints.API.Hubs;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddDbContext<EPDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -39,8 +41,6 @@ app.UseExceptionHandler(exceptionHandlerApp =>
             var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
             logger.LogError(exceptionHandlerPathFeature.Error, "Unhandled exception for request {Path}", exceptionHandlerPathFeature.Path);
 
-            // For debugging, we return detailed error info.
-            // In a locked-down production environment, you might want to return a more generic message.
             var errorResponse = new
             {
                 message = "An unexpected error occurred.",
@@ -91,5 +91,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+app.MapHub<PointsHub>("/pointshub");
 
 app.Run();

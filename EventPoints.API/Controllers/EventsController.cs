@@ -3,6 +3,7 @@ using EventPoints.API.Hubs;
 using EventPoints.Domain.DTOs;
 using EventPoints.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPoints.API.Controllers
@@ -113,7 +114,7 @@ namespace EventPoints.API.Controllers
 			_db.Teams.Update(team);
 			await _db.SaveChangesAsync();
 
-			await _hubContext.Clients.All.SendAsync("PointsUpdated", eventId, teamId, request.Points);
+			await _hubContext.Clients.All.SendAsync("PointsUpdated", eventId, teamId, team.Points);
 
 			return NoContent();
 		}
