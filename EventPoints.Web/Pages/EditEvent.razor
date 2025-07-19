@@ -1,43 +1,55 @@
-﻿@page "/admin/edit-event"
+﻿@page "/manage/edit-event"
 @using EventPoints.Web.Components
 @using EventPoints.Web.Enums
+
 <div class="content-container">
-    <h2 class="section-header">Edit Event</h2>
-    @if(SelectedEvent == null)
+    @* <h2 class="section-header">Edit Event</h2> *@
+    @if (IsLoading)
     {
         <Spinner />
-    } else {
-        <div class="card edit-section">
-            <h4>Event Info</h4>
-            <TextInput Label="Event Name" Value="@SelectedEvent.Name" Placeholder="Event name..." ValueChanged="@EventNameChanged" />
-            <div>
-                @if ( IsSaving )
-                {
-                    <Spinner />
-                }
-                else
-                {
-                    <Button ButtonType=ButtonType.Primary Label="Save Changes" OnClick="@(() => SaveEventChanges())" />
-                }
-            </div>
-        </div>
-       
-        <div class="teams-container">
-            <h4>Teams</h4>
-            <div class="add-row">
-                <Button Label="New" ButtonType=ButtonType.Primary OnClick="CreateTeam" />
-                <span>@SelectedEvent.Teams.Count @(SelectedEvent.Teams.Count > 1 ? "teams" : "team")</span>
-            </div>
-            @foreach ( var team in SelectedEvent.Teams )
-            {
-                <div class="row-card">
-                    <span class="name">@team.Name</span>
-                    <div class="action-buttons">
-                        <Button ButtonType=ButtonType.Secondary OnClick="@(() => EditTeam(team))" Label="Edit" />
-                        <Button ButtonType=ButtonType.Delete OnClick="@(() => DeleteTeam(team))" Label="Delete" />
-                    </div>
+    }
+    else
+    {
+        @if (SelectedEvent == null)
+        {
+            <span>Not found</span>
+        }
+        else
+        {
+            <div class="card edit-section">
+                <h4>Event Info</h4>
+                <TextInput Label="Event Name" Value="@SelectedEvent.Name" Placeholder="Event name..."
+                    ValueChanged="@EventNameChanged" />
+                <div>
+                    @if (IsSaving)
+                    {
+                        <Spinner />
+                    }
+                    else
+                    {
+                        <Button IsDisabled=@(!IsEditing) ButtonType=ButtonType.Primary Label="Save Changes"
+                            OnClick="@(() => SaveEventChanges())" />
+                    }
                 </div>
-            }
-        </div>
+            </div>
+
+            <div class="teams-container">
+                <h4>Teams</h4>
+                <div class="add-row">
+                    <Button Label="New" ButtonType=ButtonType.Primary OnClick="CreateTeam" />
+                    <span>@SelectedEvent.Teams.Count @(SelectedEvent.Teams.Count > 1 ? "teams" : "team")</span>
+                </div>
+                @foreach (var team in SelectedEvent.Teams)
+                {
+                    <div class="row-card">
+                        <span class="name">@team.Name</span>
+                        <div class="action-buttons">
+                            <Button ButtonType=ButtonType.Secondary OnClick="@(() => EditTeam(team))" Label="Edit" />
+                            <Button ButtonType=ButtonType.Delete OnClick="@(() => DeleteTeam(team))" Label="Delete" />
+                        </div>
+                    </div>
+                }
+            </div>
+        }
     }
 </div>

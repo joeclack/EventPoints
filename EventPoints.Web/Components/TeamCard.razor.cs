@@ -22,11 +22,13 @@ namespace EventPoints.Web.Components
 		{
 			try
 			{
-				await EventsService.IncrementTeamPoints(Team ,PointsInput);
+				using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+				await EventsService.IncrementTeamPoints(Team, PointsInput, cts.Token);
 				Team.Points += PointsInput;
 				StateHasChanged();
 			}
-			catch ( HttpRequestException ex )
+			catch (HttpRequestException ex)
 			{
 				Console.Error.WriteLine(ex.Message);
 			}
@@ -36,12 +38,14 @@ namespace EventPoints.Web.Components
 		{
 			try
 			{
-				await EventsService.SetTeamPoints(Team, 0);
+				using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+				await EventsService.SetTeamPoints(Team, 0, cts.Token);
 				Team.Points = 0;
 				PointsInput = 0;
 				StateHasChanged();
 			}
-			catch ( HttpRequestException ex )
+			catch (HttpRequestException ex)
 			{
 				Console.Error.WriteLine(ex.Message);
 			}
@@ -51,11 +55,13 @@ namespace EventPoints.Web.Components
 		{
 			try
 			{
-				await EventsService.SetTeamPoints(Team, PointsInput);
+				using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+				await EventsService.SetTeamPoints(Team, PointsInput, cts.Token);
 				Team.Points = PointsInput;
 				StateHasChanged();
 			}
-			catch ( HttpRequestException ex )
+			catch (HttpRequestException ex)
 			{
 				Console.Error.WriteLine(ex.Message);
 			}

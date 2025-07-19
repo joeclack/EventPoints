@@ -1,32 +1,46 @@
-﻿@page "/admin"
+﻿@page "/manage"
 @using EventPoints.Web.Components
 @using EventPoints.Web.Enums
 
 <div class="content-container">
     <h2 class="section-header">Events</h2>
-    @if ( EventsList == null )
+    @if (IsLoading)
     {
         <Spinner />
-    } 
+    }
     else
     {
-        <div class="add-row">
-            <Button Label="New" ButtonType=ButtonType.Primary OnClick="CreateEvent" />
-            <span>@EventsList.Count @(EventsList.Count > 1 ? "events" : "event")</span>
-        </div>
-        <div class="events-container">
-            @foreach(var ev in EventsList)
-            {
-                <div class="row-card">
-                    <span class="name">@ev.Name</span>
-                    <div class="action-buttons">
-                        <Button ButtonType=ButtonType.Secondary OnClick="@(() => EditEvent(ev))" Label="Edit" />
-                        <Button ButtonType=ButtonType.Delete OnClick="@(() => DeleteEvent(ev))" Label="Delete" />
+
+        @if (EventsList == null)
+        {
+            <span>Error loading events</span>
+        }
+        else if (!EventsList.Any())
+        {
+            <span>No events found</span>
+            <div class="add-row">
+                <Button Label="New" ButtonType=ButtonType.Primary OnClick="CreateEvent" />
+                <span>@EventsList.Count @(EventsList.Count > 1 || EventsList.Count == 0 ? "events" : "event")</span>
+            </div>
+        }
+        else
+        {
+            <div class="add-row">
+                <Button Label="New" ButtonType=ButtonType.Primary OnClick="CreateEvent" />
+                <span>@EventsList.Count @(EventsList.Count > 1 ? "events" : "event")</span>
+            </div>
+            <div class="events-container">
+                @foreach (var ev in EventsList)
+                {
+                    <div class="row-card">
+                        <span class="name">@ev.Name</span>
+                        <div class="action-buttons">
+                            <Button ButtonType=ButtonType.Secondary OnClick="@(() => EditEvent(ev))" Label="Edit" />
+                            <Button ButtonType=ButtonType.Delete OnClick="@(() => DeleteEvent(ev))" Label="Delete" />
+                        </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+        }
     }
 </div>
-
-

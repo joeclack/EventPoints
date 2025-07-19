@@ -6,12 +6,28 @@
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 	transition: all 0.3s ease;
 	overflow: hidden;
-	width: stretch;
+	min-width: 300px;
+	max-width: 100%;
+	height: auto;
+	display: flex;
+	flex-direction: column;
 }
 
 	.team-card:hover {
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 	}
+
+	/*mobile*/
+@media (max-width: 640.98px) {
+
+}
+
+/*desktop*/
+@media (min-width: 641px) {
+	.team-card {
+		flex: 1 1 300px;
+	}
+}
 
 .card-header {
 	display: flex;

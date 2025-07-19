@@ -7,7 +7,8 @@ namespace EventPoints.Web.Components
 	{
 		[Parameter] public string Label { get; set; } = string.Empty;
 		[Parameter] public EventCallback OnClick { get; set; }
-		[Parameter] public ButtonType ButtonType { get; set; }
+		[Parameter] public ButtonType ButtonType { get; set; } 
+		[Parameter] public bool IsDisabled { get; set; } 
 		public string ButtonClass => ButtonType switch
 		{
 			ButtonType.Primary => "button button-primary",

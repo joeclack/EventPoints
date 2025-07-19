@@ -5,42 +5,49 @@
 
 <div class="content-container">
     <h2 class="section-header">Events</h2>
-    @if ( EventsList == null )
+    @if (IsLoading)
     {
         <Spinner />
-    } else {
-        <div class="card filters">
-            <div class="filter-container">
-                <DropDown DisplaySelector="e => e.Name"
-                          Items="@EventsList"
-                          SelectedItemChanged="@OnEventChanged"
-                          TItem="EventDto"
-                          SelectedItem="@SelectedEvent" />
-            </div>
-            <div class="mobile-view">
+    }
+    else
+    {
+        @if(EventsList == null)
+        {
+            <span>Error loading events</span>
+        }
+        else if (!EventsList.Any())
+        {
+            <span>No events found</span>
+        }
+        else
+        {
+            <div class="card filters">
                 <div class="filter-container">
-                    <DropDown DisplaySelector="e => e.Name"
-                              Items="@SelectedEvent.Teams"
-                              SelectedItemChanged="@OnTeamChanged"
-                              TItem="TeamDto"
-                              SelectedItem="@SelectedTeam" />
+                    <DropDown DisplaySelector="e => e.Name" Items="@EventsList" SelectedItemChanged="@OnEventChanged"
+                        TItem="EventDto" SelectedItem="@SelectedEvent" />
+                </div>
+                <div class="mobile-view">
+                    <div class="filter-container">
+                        <DropDown DisplaySelector="e => e.Name" Items="@SelectedEvent.Teams"
+                            SelectedItemChanged="@OnTeamChanged" TItem="TeamDto" SelectedItem="@SelectedTeam" />
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="mobile-view">
-            @if ( SelectedTeam != null )
-            {
-                <TeamCard Team="@SelectedTeam" />
-            }
-        </div>
-        @if ( SelectedEvent != null )
-        {
-            <div class="teams-container">
-                @foreach ( var team in SelectedEvent.Teams )
+            <div class="mobile-view">
+                @if (SelectedTeam != null)
                 {
-                    <TeamCard Team="team" />
+                    <TeamCard Team="@SelectedTeam" />
                 }
             </div>
+            @if (SelectedEvent != null)
+            {
+                <div class="teams-container">
+                    @foreach (var team in SelectedEvent.Teams)
+                    {
+                        <TeamCard Team="team" />
+                    }
+                </div>
+            }
         }
     }
 </div>

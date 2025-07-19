@@ -1,38 +1,42 @@
-﻿@page "/admin/edit-team"
+﻿@page "/manage/edit-team"
 @using EventPoints.Web.Components
 @using EventPoints.Web.Enums
 
 <div class="content-container">
-    <h2 class="section-header">Edit Team</h2>
-    @if ( SelectedTeam == null )
+    @* <h2 class="section-header">Edit Team</h2> *@
+    @if ( IsLoading )
     {
         <Spinner />
     } else {
-        <div class="card edit-section">
-            <h4>Team Info</h4>
-            <TextInput Label="Name" Value="@SelectedTeam!.Name" Placeholder="Team name..." ValueChanged="@SelectedTeamNameChanged" />
-            <div>
-                @if ( IsSaving )
-                {
-                    <Spinner />
-                }
-                else
-                {
-                    <Button ButtonType=ButtonType.Primary Label="Save Changes" OnClick="@(() => SaveTeamChanges())" />
-                }
-            </div>
-        </div>
-        <div class="card edit-section">
-            <h4>Team Image</h4>
-            <div class="settings-row image-row">
-                <div class="team-image-container">
-                    @if ( !string.IsNullOrEmpty(SelectedTeam!.ImageUrl) )
+        @if(SelectedTeam == null) {
+            <span>Not found</span>
+        } else {
+            <div class="card edit-section">
+                <h4>Team Info</h4>
+                <TextInput Label="Name" Value="@SelectedTeam!.Name" Placeholder="Team name..." ValueChanged="@SelectedTeamNameChanged" />
+                <div>
+                    @if ( IsSaving )
                     {
-                        <img src="@SelectedTeam!.ImageUrl" alt="Team Icon" class="team-image" />
+                        <Spinner />
+                    }
+                    else
+                    {
+                        <Button IsDisabled=@(!IsEditing) ButtonType=ButtonType.Primary Label="Save Changes" OnClick="@(() => SaveTeamChanges())" />
                     }
                 </div>
-                <ImageUpload TeamId="@SelectedTeam!.Id" OnUploadSuccess="() => Refresh()" />
             </div>
-        </div>
+            <div class="card edit-section">
+                <h4>Team Image</h4>
+                <div class="settings-row image-row">
+                    <div class="team-image-container">
+                        @if ( !string.IsNullOrEmpty(SelectedTeam!.ImageUrl) )
+                        {
+                            <img src="@SelectedTeam!.ImageUrl" alt="Team Icon" class="team-image" />
+                        }
+                    </div>
+                    <ImageUpload TeamId="@SelectedTeam!.Id" OnUploadSuccess="() => Refresh()" />
+                </div>
+            </div>
+        }
     }
 </div>

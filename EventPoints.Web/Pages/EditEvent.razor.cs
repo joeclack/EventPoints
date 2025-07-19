@@ -16,6 +16,8 @@ namespace EventPoints.Web.Pages
 		[Inject] private NavigationManager NavigationManager { get; set; } = default!;
 		public EventDto? SelectedEvent { get; set; } = null;
 		public bool IsSaving { get; set; }
+		public bool IsEditing {get; set;}
+		public bool IsLoading { get; set; }
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -24,28 +26,38 @@ namespace EventPoints.Web.Pages
 
 		public async Task<EventDto> GetEvent()
 		{
-			return await EventsService.GetEventByIdAsync(EventId);
+			IsLoading = true;
+			using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+			var @event = await EventsService.GetEventByIdAsync(EventId, cts.Token);
+			IsLoading = false;
+			return @event;
 		}
 
 		public async Task CreateTeam()
 		{
 			string name = "New Team";
-			await EventsService.CreateTeam(name, SelectedEvent.Id);
+			using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+			await EventsService.CreateTeam(name, SelectedEvent.Id, cts.Token);
 			await RefreshEvent();
 		}
 
 		public async Task RefreshEvent()
 		{
-			SelectedEvent = await EventsService.GetEventByIdAsync(SelectedEvent.Id);
+			IsLoading = true;
+			using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+			SelectedEvent = await EventsService.GetEventByIdAsync(SelectedEvent.Id, cts.Token);
+			IsLoading = false;
 		}
 
 		public async Task SaveEventChanges()
 		{
 			try
 			{
+				using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 				IsSaving = true;
-				await EventsService.EditEventName(EventId, SelectedEvent.Name);
+				await EventsService.EditEventName(EventId, SelectedEvent.Name, cts.Token);
 				IsSaving = false;
+				IsEditing = false;
 			}
 			catch ( HttpRequestException ex )
 			{
@@ -55,18 +67,24 @@ namespace EventPoints.Web.Pages
 
 		public void EventNameChanged(string name)
 		{
-			SelectedEvent.Name = name;
+			if(name != SelectedEvent.Name) {
+				SelectedEvent.Name = name;
+				IsEditing = true;
+				return;
+			}
+			IsEditing = false;
 		}
 
 		public async Task DeleteTeam(TeamDto team)
 		{
-			await EventsService.DeleteTeam(team.Id, EventId);
+			using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+			await EventsService.DeleteTeam(team.Id, EventId, cts.Token);
 			SelectedEvent = await GetEvent();
 		}
 
 		public void EditTeam(TeamDto team)
 		{
-			NavigationManager.NavigateTo($"/admin/edit-team?Teamid={team.Id}");
+			NavigationManager.NavigateTo($"/manage/edit-team?Teamid={team.Id}");
 		}
 	}
 }

@@ -13,6 +13,9 @@ namespace EventPoints.Web.Pages
 		[SupplyParameterFromQuery]
 		public Guid TeamId { get; set; }
 		public bool IsSaving { get; set; }
+		public bool IsEditing { get; set; }
+		public bool IsLoading { get; set; }
+
 
 		public TeamDto? SelectedTeam { get; set; }
 
@@ -20,9 +23,33 @@ namespace EventPoints.Web.Pages
 		{
 			SelectedTeam = await GetTeam();
 		}
-		public async Task<TeamDto> GetTeam()
+		public async Task<TeamDto?> GetTeam()
 		{
-			return await EventsService.GetTeamByIdAsync(TeamId);
+			try
+			{
+				IsLoading = true;
+				using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+				var team = await EventsService.GetTeamByIdAsync(TeamId, cts.Token);
+				IsLoading = false;
+				return team;
+			}
+			catch (OperationCanceledException ex)
+			{
+				IsLoading = false;
+				return null;
+			}
+			catch (HttpRequestException ex)
+			{
+				IsLoading = false;
+				Console.WriteLine($"Error fetching team: {ex.Message}");
+				return null;
+			}
+			catch (Exception ex)
+			{
+				IsLoading = false;
+				Console.WriteLine($"Unexpected error: {ex.Message}");
+				return null;
+			}
 		}
 
 		public void Refresh()
@@ -35,18 +62,30 @@ namespace EventPoints.Web.Pages
 			try
 			{
 				IsSaving = true;
-				await EventsService.EditTeamName(TeamId, SelectedTeam.Name);
+				IsEditing = true;
+				using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+				await EventsService.EditTeamName(TeamId, SelectedTeam.Name, cts.Token);
 				IsSaving = false;
+				IsEditing = false;
 			}
-			catch ( HttpRequestException ex )
+			catch (HttpRequestException ex)
 			{
-				Console.WriteLine($"Error saving event changes: {ex.Message}");
+			}
+			catch (OperationCanceledException ex)
+			{
 			}
 		}
 
 		public void SelectedTeamNameChanged(string name)
 		{
-			SelectedTeam.Name = name;
+
+			if (name != SelectedTeam.Name)
+			{
+				SelectedTeam.Name = name;
+				IsEditing = true;
+				return;
+			}
+			IsEditing = false;
 		}
 	}
 }

@@ -17,9 +17,9 @@ namespace EventPoints.Domain.DTOs
 
 		public string? ImageUrl { get; set; } 
 
-		public void SetImage()
+		public void SetImage(string baseUrl)
 		{
-			ImageUrl = $"https://localhost:7174/api/Events/teams/{Id}/image";
+			ImageUrl = $"{baseUrl}Events/teams/{Id}/image";
 		}
 
 		public Team CreateTeam(TeamDto team)

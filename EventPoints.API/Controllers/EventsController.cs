@@ -1,4 +1,5 @@
 ﻿using EventPoints.API.Database;
+using EventPoints.API.Hubs;
 using EventPoints.Domain.DTOs;
 using EventPoints.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +12,18 @@ namespace EventPoints.API.Controllers
 	public class EventsController : Controller
 	{
 		private EPDbContext _db { get; }
+		private readonly IHubContext<PointsHub> _hubContext;
 
-		public EventsController(EPDbContext dbContext)
+		public EventsController(EPDbContext dbContext, IHubContext<PointsHub> hubContext)
 		{
 			_db = dbContext;
+			_hubContext = hubContext;
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> CreateEvent([FromBody] CreateEventRequest request)
 		{
-			if ( string.IsNullOrWhiteSpace(request.Name) )
+			if (string.IsNullOrWhiteSpace(request.Name))
 				return BadRequest("Event name cannot be empty.");
 
 			var newEvent = new Event(request.Name);
@@ -34,7 +37,7 @@ namespace EventPoints.API.Controllers
 		public async Task<IActionResult> DeleteEvent(Guid eventId)
 		{
 			var @event = await _db.Events.Include(e => e.Teams).FirstOrDefaultAsync(e => e.Id == eventId);
-			if ( @event == null )
+			if (@event == null)
 				return NotFound($"Event with ID {eventId} not found.");
 
 			_db.Events.Remove(@event);
@@ -45,7 +48,7 @@ namespace EventPoints.API.Controllers
 		[HttpPost("teams")]
 		public async Task<IActionResult> AddTeam([FromBody] CreateTeamRequest request)
 		{
-			if ( string.IsNullOrWhiteSpace(request.Name) )
+			if (string.IsNullOrWhiteSpace(request.Name))
 				return BadRequest("Team name cannot be empty.");
 
 			var team = new Team(request.eventId, request.Name);
@@ -59,9 +62,9 @@ namespace EventPoints.API.Controllers
 		public async Task<IActionResult> EditEventName(Guid eventId, [FromBody] EditNameRequest request)
 		{
 			var @event = await _db.Events.FirstOrDefaultAsync(e => e.Id == eventId);
-			if ( @event == null )
+			if (@event == null)
 				return NotFound($"Event with ID {eventId} not found.");
-			if ( string.IsNullOrWhiteSpace(request.Name) )
+			if (string.IsNullOrWhiteSpace(request.Name))
 				return BadRequest("Event name cannot be empty.");
 			@event.Name = request.Name;
 			_db.Events.Update(@event);
@@ -74,9 +77,9 @@ namespace EventPoints.API.Controllers
 		{
 			Console.WriteLine("Preparing to update team name");
 			var team = await _db.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
-			if ( team == null )
+			if (team == null)
 				return NotFound($"Team with ID {teamId} not found.");
-			if ( string.IsNullOrWhiteSpace(request.Name) )
+			if (string.IsNullOrWhiteSpace(request.Name))
 				return BadRequest("Team name cannot be empty.");
 			team.Name = request.Name;
 			_db.Teams.Update(team);
@@ -91,7 +94,7 @@ namespace EventPoints.API.Controllers
 		public async Task<IActionResult> DeleteTeam(Guid eventId, Guid teamId)
 		{
 			var team = await _db.Teams.FirstOrDefaultAsync(t => t.Id == teamId && t.EventId == eventId);
-			if ( team == null )
+			if (team == null)
 				return NotFound($"Team with ID {teamId} not found.");
 
 			_db.Teams.Remove(team);
@@ -103,21 +106,23 @@ namespace EventPoints.API.Controllers
 		public async Task<IActionResult> UpdatePoints(Guid eventId, Guid teamId, [FromBody] UpdatePointsRequest request)
 		{
 			var team = await _db.Teams.FirstOrDefaultAsync(t => t.Id == teamId && t.EventId == eventId);
-			if ( team == null )
+			if (team == null)
 				return NotFound($"Team with ID {teamId} not found.");
 
 			team.Points += request.Points;
 			_db.Teams.Update(team);
 			await _db.SaveChangesAsync();
 
-			return Ok();
+			await _hubContext.Clients.All.SendAsync("PointsUpdated", eventId, teamId, request.Points);
+
+			return NoContent();
 		}
 
 		[HttpPut("{eventId}/teams/{teamId}/setPoints")]
 		public async Task<IActionResult> SetPoints(Guid eventId, Guid teamId, [FromBody] SetPointsRequest request)
 		{
 			var team = await _db.Teams.FirstOrDefaultAsync(t => t.Id == teamId && t.EventId == eventId);
-			if ( team == null )
+			if (team == null)
 				return NotFound($"Team with ID {teamId} not found.");
 			team.Points = request.Points;
 			_db.Teams.Update(team);
@@ -136,7 +141,7 @@ namespace EventPoints.API.Controllers
 		public async Task<IActionResult> GetEvent(Guid eventId)
 		{
 			var @event = await _db.Events.Include(e => e.Teams).FirstOrDefaultAsync(e => e.Id == eventId);
-			if ( @event == null )
+			if (@event == null)
 				return NotFound($"Event with ID {eventId} not found.");
 
 			return Ok(@event);
@@ -146,7 +151,7 @@ namespace EventPoints.API.Controllers
 		public async Task<IActionResult> GetTeam(Guid teamId)
 		{
 			var team = await _db.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
-			if ( team == null )
+			if (team == null)
 				return NotFound($"Team with ID {teamId} not found.");
 			return Ok(team);
 		}
@@ -166,11 +171,11 @@ namespace EventPoints.API.Controllers
 		[HttpPost("teams/{teamId}/upload-image")]
 		public async Task<IActionResult> UploadIcon(Guid teamId, IFormFile file)
 		{
-			if ( file is null || file.Length == 0 )
+			if (file is null || file.Length == 0)
 				return BadRequest("No file uploaded");
 
 			var team = await _db.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
-			if ( team is null ) return NotFound();
+			if (team is null) return NotFound();
 
 			using var ms = new MemoryStream();
 			await file.CopyToAsync(ms);
@@ -185,7 +190,7 @@ namespace EventPoints.API.Controllers
 		public async Task<IActionResult> GetTeamIcon(Guid teamId)
 		{
 			var team = await _db.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
-			if ( team == null || team.TeamImage == null )
+			if (team == null || team.TeamImage == null)
 				return NotFound();
 
 			return File(team.TeamImage, team.ImageMimeType);

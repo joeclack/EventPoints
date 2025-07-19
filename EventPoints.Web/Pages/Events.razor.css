@@ -1,7 +1,8 @@
 ﻿.teams-container {
-	justify-content: space-between;
-	flex-direction: row;
+	display: flex;
+	flex-wrap: wrap;
 	margin-top: 10px;
+	align-items: stretch; 
 	gap: 10px;
 }
 
@@ -53,9 +54,5 @@
 @media (min-width: 641px) {
 	.mobile-view {
 		display: none;
-	}
-
-	.teams-container {
-		display: flex;
 	}
 }
