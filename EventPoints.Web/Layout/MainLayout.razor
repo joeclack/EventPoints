@@ -4,43 +4,46 @@
 @inherits LayoutComponentBase
 
 <div class="page">
-	<div class="mobile-nav">
-		<span class="title">Points</span>
-        <button class="hamburger" @onclick="ToggleMobileNav" tabindex="0" aria-label="Open navigation menu" role="button" type="button">
-			<div class="menu-icon">
-				<span></span>
-				<span></span>
-				<span></span>
-			</div>
-		</button>
-	</div>
+    <div class="mobile-nav">
+        <span class="title">Points</span>
+        <button class="hamburger" @onclick="ToggleMobileNav" tabindex="0" aria-label="Open navigation menu"
+            role="button" type="button">
+            <div class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+    </div>
     <div class="desktop-nav">
-		<NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/">
-			<span>Home</span>	
-		</NavLink>
-		<NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/manage">
-			<span>Manage</span>
-		</NavLink>
-	</div>
+        <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/">
+            <span>Home</span>
+        </NavLink>
+        <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/manage">
+            <span>Manage</span>
+        </NavLink>
+    </div>
     <main>
-        <article class="content px-4">
+        <article class="content">
             @Body
         </article>
     </main>
     @if (isMobileNavOpen)
     {
         <div class="mobile-drawer-nav">
-            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/" @onclick="ToggleMobileNav">
+            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/"
+                @onclick="ToggleMobileNav">
                 <span>Home</span>
             </NavLink>
-            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/manage" @onclick="ToggleMobileNav">
+            <NavLink class="navlink" Match="NavLinkMatch.All" ActiveClass="active-navlink" href="/manage"
+                @onclick="ToggleMobileNav">
                 <span>Manage</span>
             </NavLink>
         </div>
     }
 </div>
 
-@code 
+@code
 {
     private bool isMobileNavOpen = false;
     private void ToggleMobileNav()
